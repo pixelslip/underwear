@@ -6,10 +6,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'dev'
 
 const dirApp = path.join(__dirname, 'js')
+const dirShared = path.join(__dirname, 'shared')
 const dirStyles = path.join(__dirname, 'styles')
 const dirNode = 'node_modules'
 
@@ -19,7 +21,7 @@ module.exports = {
     path.join(dirStyles, 'index.scss')
   ],
 
- /*  resolve: {
+  resolve: {
     modules: [
       dirApp,
       dirShared,
@@ -27,10 +29,18 @@ module.exports = {
       dirNode
     ]
   },
-*/
   plugins: [
     new webpack.DefinePlugin({
       IS_DEVELOPMENT
+    }),
+
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: './shared',
+          to: ''
+        }
+      ]
     }),
 
     new MiniCssExtractPlugin({
@@ -50,7 +60,10 @@ module.exports = {
     //   }
     // }),
 
-    new CleanWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: 'index.html'
+    }),
+    new CleanWebpackPlugin(),
   ],
 
   module: {

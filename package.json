@@ -1,10 +1,9 @@
 {
-  "name": "pixelslip-landing",
+  "name": "underwear",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --progress --config webpack.config.build.js",
-    "front:dev": "webpack serve --progress --config webpack.config.development.js",
-    "dev": "webpack --watch --config webpack.config.development.js",
+    "dev": "webpack serve --progress --config webpack.config.development.js",
     "start": "concurrently --kill-others \"npm run dev\""
   },
   "author": "Pierre Boumal",
@@ -23,6 +22,7 @@
     "file-loader": "^6.2.0",
     "glslify-loader": "^2.0.0",
     "gsap": "^3.9.1",
+    "html-webpack-plugin": "^5.5.0",
     "image-minimizer-webpack-plugin": "^3.2.3",
     "imagemin": "^8.0.1",
     "imagemin-gifsicle": "^7.0.0",
