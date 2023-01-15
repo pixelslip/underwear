@@ -64,11 +64,10 @@ module.exports = {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff)$/,
         type: 'asset/resource'
       },
-      // {
-      //   test: /\.(glsl|frag|vert)$/,
-      //   loader: ['raw-loader', 'glslify-loader'],
-      //   exclude: /node_modules/
-      // }
+      {
+        test: /\.glsl$/,
+        loader: 'webpack-glsl-loader'
+      }
     ]
   }
 }
