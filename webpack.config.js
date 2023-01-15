@@ -1,62 +1,53 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const IS_DEVELOPMENT = process.env.NODE_ENV === 'dev'
+let htmlPages = "index about product".split(' ')
 
-const dirApp = path.join(__dirname, 'js')
-const dirStyles = path.join(__dirname, 'styles')
-const dirNode = 'node_modules'
+let multipleHtmlPlugins = htmlPages.map(name => {
+  return new HtmlWebpackPlugin({
+    template: `./src/${name}.html`,
+    filename: `${name}.html`,
+  })
+})
+
+// fs.readdir('./src/', (err, files) => {
+//   let htmlPages = files.filter(file => file.match(RegExp(/.html$/)));
+// });
 
 module.exports = {
   entry: [
-    path.join(dirApp, 'app.js'),
-    path.join(dirStyles, 'index.scss')
+    path.join(__dirname, 'src/js/app.js'),
+    path.join(__dirname, 'src/styles/index.scss')
   ],
 
-  resolve: {
-    modules: [
-      dirApp,
-      dirStyles,
-      dirNode
-    ]
-  },
   plugins: [
-    new webpack.DefinePlugin({
-      IS_DEVELOPMENT
-    }),
-
     new MiniCssExtractPlugin({
       filename: '[name].css',
-      chunkFilename: '[id].css'
+      chunkFilename: '[name].css'
     }),
-
     new HtmlWebpackPlugin({
-      template: 'index.html'
-    }),
-    new CleanWebpackPlugin(),
-  ],
+      template: `./src/index.html`,
+    })
+  ].concat(multipleHtmlPlugins),
 
   module: {
     rules: [
       {
+        test: /\.html$/,
+        loader: 'html-loader'
+      },
+      {
         test: /\.js$/,
-        use: {
-          loader: 'babel-loader'
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.scss$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: ''
-            }
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader'
@@ -69,37 +60,15 @@ module.exports = {
           }
         ]
       },
-
       {
-        test: /\.(jpe?g|png|gif|svg|woff2?|fnt|webp)$/,
-        loader: 'file-loader',
-        options: {
-          name (file) {
-            return '[hash].[ext]'
-          }
-        }
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff)$/,
+        type: 'asset/resource'
       },
-
-      {
-        test: /\.(jpe?g|png|gif|svg|webp)$/i,
-        use: [
-          {
-            loader: ImageMinimizerPlugin.loader
-          }
-        ]
-      },
-
-      {
-        test: /\.(glsl|frag|vert)$/,
-        loader: 'raw-loader',
-        exclude: /node_modules/
-      },
-
-      {
-        test: /\.(glsl|frag|vert)$/,
-        loader: 'glslify-loader',
-        exclude: /node_modules/
-      }
+      // {
+      //   test: /\.(glsl|frag|vert)$/,
+      //   loader: ['raw-loader', 'glslify-loader'],
+      //   exclude: /node_modules/
+      // }
     ]
   }
 }
