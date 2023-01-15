@@ -1,21 +1,23 @@
 const path = require('path')
 const webpack = require('webpack')
+const fs = require('fs')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let htmlPages = "index about product".split(' ')
+let htmlPages = []
+let files = fs.readdirSync('src')
 
-let multipleHtmlPlugins = htmlPages.map(name => {
-  return new HtmlWebpackPlugin({
-    template: `./src/${name}.html`,
-    filename: `${name}.html`,
-  })
+files.forEach(file => {
+  if(file.match(/\.html$/)) {
+    htmlPages.push(
+      new HtmlWebpackPlugin({
+        template: `./src/${file}`,
+        filename: `${file}`,
+      })
+    )
+  }
 })
-
-// fs.readdir('./src/', (err, files) => {
-//   let htmlPages = files.filter(file => file.match(RegExp(/.html$/)));
-// });
 
 module.exports = {
   entry: [
@@ -28,10 +30,8 @@ module.exports = {
       filename: '[name].css',
       chunkFilename: '[name].css'
     }),
-    new HtmlWebpackPlugin({
-      template: `./src/index.html`,
-    })
-  ].concat(multipleHtmlPlugins),
+    ...htmlPages
+  ],
 
   module: {
     rules: [
