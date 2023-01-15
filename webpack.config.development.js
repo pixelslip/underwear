@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge')
 const path = require('path')
 const config = require('./webpack.config')
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 
 module.exports = merge(config, {
   mode: 'development',
@@ -15,5 +16,29 @@ module.exports = merge(config, {
     filename: '[name].js',
     assetModuleFilename: '[name][ext]',
     clean: true
-  }
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.squooshMinify,
+          options: {
+            encodeOptions: {
+              mozjpeg: {
+                quality: 80,
+              },
+              webp: {
+                lossless: 1,
+              },
+              avif: {
+                cqLevel: 0,
+              },
+            },
+          },
+        },
+      }),
+    ],
+  },
 })
