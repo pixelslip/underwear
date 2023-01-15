@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+@import "reset";
+@import "colors";
+
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: $cwhite;
+  color: $cblack;
+  font-family: "Roboto", Arial, sans-serif;
+  line-height: 1.5;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+@import "queries";
