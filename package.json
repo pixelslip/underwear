@@ -35,6 +35,7 @@
     "imagemin-pngquant": "^9.0.2",
     "imagemin-svgo": "^10.0.1",
     "include-media": "^1.4.10",
+    "lil-gui": "^0.18.1",
     "mini-css-extract-plugin": "^2.6.0",
     "normalize-wheel": "^1.0.1",
     "ogl": "^0.0.87",
